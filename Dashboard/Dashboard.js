@@ -1659,4 +1659,5 @@ window.exportarPlanilhaResgate = function () {
     link.click();
     document.body.removeChild(link);
 
+
 };
