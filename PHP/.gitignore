@@ -4,3 +4,4 @@
 # Banco de dados gerado localmente
 *.sqlite
 *.db
+config.ini
