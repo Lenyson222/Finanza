@@ -1,0 +1,40 @@
+/* cadastro.css — Estilos extras exclusivos da tela de cadastro */
+
+/* Botão de criar conta — verde */
+.btn-cadastrar {
+    background: linear-gradient(135deg, var(--accent-green), #00b87c) !important;
+    color: #101012 !important;
+    box-shadow: 0 4px 20px rgba(51, 255, 184, 0.25) !important;
+    font-size: 16px !important;
+}
+
+.btn-cadastrar:hover {
+    box-shadow: 0 8px 30px rgba(51, 255, 184, 0.4) !important;
+}
+
+/* Indicador de força da senha */
+.forca-senha-wrapper {
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.07);
+    overflow: hidden;
+    margin-top: 6px;
+}
+
+.forca-barra {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.35s ease, background 0.35s ease;
+}
+
+.forca-label {
+    font-size: 11px;
+    font-weight: 600;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    text-align: left;
+    min-height: 14px;
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanza - Data Intelligence</title>
+    <link rel="stylesheet" href="../shared/base.css">
+    <link rel="stylesheet" href="../Dashboard.css">
+    <link rel="stylesheet" href="Investimentos.css">
+</head>
+
+<body>
+
+    <div id="main-dashboard">
+        <header class="glass-header">
+            <div class="header-logo-wrapper">
+                <img src="../../logopn.png" alt="Logo">
+                <h1 class="glow-text-blue" style="font-size: 27px; margin: 0;">FINANZA</h1>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="../Inicio/Inicio.html">Início</a>
+                <a href="../Metas/Metas.html">Metas</a>
+                <a href="../Cotacoes/Cotacoes.html">Cotações</a>
+                <a class="ativo" href="../Investimentos/Investimentos.html">Investimentos</a>
+                <a href="../Sos/Sos.html" style="color: #ff6677; font-weight: bold;">🆘 SOS</a>
+                <a href="../Perfil/Perfil.html">Perfil</a>
+            </nav>
+
+            <div class="perfil-usuario">
+                <span id="nome-usuario" class="user-name"></span>
+                <img id="foto-usuario" class="foto-perfil" src="" alt="Foto de Perfil" style="display: none;">
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section id="tela-operacional" class="section-grid fade-in-up">
+
+                <div class="inputs-column">
+
+                    <article id="aba-investimento" class="sub-aba ativa">
+
+                        <div class="card glass-card" style="display: flex; flex-direction: column; gap: 20px;">
+                            <h2 class="card-title text-blue">Análise Gráfica de Ativos</h2>
+                            <p class="text-muted">Acompanhe a cotação em tempo real de ações Brasileiras, Fundos e
+                                Globais usando o modelo quantitativo interativo.</p>
+
+                            <div class="input-row" style="align-items: flex-end;">
+                                <div class="input-group" style="flex: 1; margin-bottom: 0;">
+                                    <label class="uppercase-label">Selecione o Ativo Desejado</label>
+                                    <select id="ativo-investimento" class="custom-select">
+                                        <optgroup label="Ações Brasileiras (B3)">
+                                            <option value="BMFBOVESPA:PETR4">Petrobras (PETR4)</option>
+                                            <option value="BMFBOVESPA:VALE3">Vale (VALE3)</option>
+                                            <option value="BMFBOVESPA:ITUB4">Itaú Unibanco (ITUB4)</option>
+                                            <option value="BMFBOVESPA:BBDC4">Bradesco (BBDC4)</option>
+                                            <option value="BMFBOVESPA:WEGE3">WEG (WEGE3)</option>
+                                            <option value="BMFBOVESPA:ABEV3">Ambev (ABEV3)</option>
+                                        </optgroup>
+                                        <optgroup label="Fundos Imobiliários (FIIs)">
+                                            <option value="BMFBOVESPA:MXRF11">Maxi Renda (MXRF11)</option>
+                                            <option value="BMFBOVESPA:HGLG11">CSHG Logística (HGLG11)</option>
+                                            <option value="BMFBOVESPA:KNRI11">Kinea Renda (KNRI11)</option>
+                                            <option value="BMFBOVESPA:BCFF11">BTG Pactual (BCFF11)</option>
+                                        </optgroup>
+                                        <optgroup label="Índices Globais">
+                                            <option value="BMFBOVESPA:IBOV">Ibovespa (Índice BM&F Bovespa)</option>
+                                            <option value="AMEX:SPY">S&P 500 ETF (SPY)</option>
+                                            <option value="NASDAQ:QQQ">NASDAQ 100 ETF (QQQ)</option>
+                                        </optgroup>
+                                        <optgroup label="Ações Internacionais e BDRs">
+                                            <option value="NASDAQ:AAPL">Apple (AAPL)</option>
+                                            <option value="NASDAQ:MSFT">Microsoft (MSFT)</option>
+                                            <option value="NASDAQ:TSLA">Tesla (TSLA)</option>
+                                            <option value="NASDAQ:AMZN">Amazon (AMZN)</option>
+                                            <option value="NASDAQ:GOOGL">Google (GOOGL)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+
+                                <button class="btn-green btn-small" style="padding: 14px 20px !important;"
+                                    onclick="window.atualizarGraficoInvestimentos()">
+                                    Visualizar Gráfico do Ativo
+                                </button>
+                            </div>
+
+                            <div id="tradingview_investimentos_container"
+                                style="height: 500px; width: 100%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-light);">
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <aside id="sidebar-principal" class="sidebar-sticky">
+                    <div id="status-card" class="card glass-card card-destaque">
+                        <label id="label-sobra" class="text-green uppercase-label">Sobra Mensal Estimada</label>
+                        <div id="resultado-sobra" class="valor-gigante">R$ 0,00</div>
+                    </div>
+
+                    <div id="card-grafico-distribuicao" class="card glass-card" style="padding: 20px;">
+                        <h2 class="card-title text-blue" style="font-size: 16px; margin-bottom: 15px;">Distribuição de Despesas</h2>
+                        <div class="chart-container" style="width: 100%;">
+                            <canvas id="meuGrafico"></canvas>
+                        </div>
+                        <div id="distribuicao-legenda"></div>
+                    </div>
+                </aside>
+            </section>
+        </main>
+    </div>
+
+    <datalist id="opcoes-categorias-saida">
+        <option value="Alimentação">
+        <option value="Supermercado">
+        <option value="Transporte">
+        <option value="Saúde">
+        <option value="Lazer">
+        <option value="Contas Residenciais">
+        <option value="Cartão de Crédito / Serviços">
+        <option value="Educação">
+        <option value="Vestuário">
+        <option value="Pix / Transferências">
+        <option value="Outros">
+    </datalist>
+
+    <datalist id="opcoes-categorias-entrada">
+        <option value="Salário">
+        <option value="Pró-labore">
+        <option value="Rendimentos">
+        <option value="Venda">
+        <option value="Reembolso">
+        <option value="TED Recebida">
+        <option value="PIX Recebido">
+        <option value="Presente">
+    </datalist>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../Login/supabase-init.js"></script>
+    <script src="../db.js"></script>
+    <script type="module" src="Investimentos.js"></script>
+
+</body>
+
+</html>

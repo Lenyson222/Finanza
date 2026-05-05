@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanza - Data Intelligence</title>
+    <link rel="stylesheet" href="../shared/base.css">
+    <link rel="stylesheet" href="../Dashboard.css">
+    <link rel="stylesheet" href="Sos.css">
+</head>
+
+<body>
+
+    <div id="main-dashboard">
+        <header class="glass-header">
+            <div class="header-logo-wrapper">
+                <img src="../../logopn.png" alt="Logo">
+                <h1 class="glow-text-blue" style="font-size: 27px; margin: 0;">FINANZA</h1>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="../Inicio/Inicio.html">Início</a>
+                <a href="../Metas/Metas.html">Metas</a>
+                <a href="../Cotacoes/Cotacoes.html">Cotações</a>
+                <a href="../Investimentos/Investimentos.html">Investimentos</a>
+                <a class="ativo" href="../Sos/Sos.html" style="color: #ff6677; font-weight: bold;">🆘 SOS</a>
+                <a href="../Perfil/Perfil.html">Perfil</a>
+            </nav>
+
+            <div class="perfil-usuario">
+                <span id="nome-usuario" class="user-name"></span>
+                <img id="foto-usuario" class="foto-perfil" src="" alt="Foto de Perfil" style="display: none;">
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section id="tela-operacional" class="section-grid fade-in-up">
+
+                <div class="inputs-column">
+
+                    <!-- INÍCIO SOS FINANCEIRO -->
+                    <article id="aba-sos" class="sub-aba ativa">
+                        <div class="card glass-card"
+                            style="border-color: rgba(255, 102, 119, 0.4); box-shadow: 0 0 20px rgba(255, 102, 119, 0.1);">
+                            
+                            <!-- Header SOS Premium -->
+                            <div class="card-header-flex" style="flex-wrap: wrap; gap: 10px;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <div class="sos-pulse-container">
+                                        <div class="sos-pulse-circle"></div>
+                                        <span style="font-size: 24px; position: relative; z-index: 2;">🚨</span>
+                                    </div>
+                                    <h2 class="card-title text-red" style="margin: 0;">Operação Resgate: Controle Total</h2>
+                                </div>
+                                <p class="text-muted" style="width: 100%;">Ajuste os controles abaixo para simular o impacto do tempo e dos juros na sua vida financeira.</p>
+                            </div>
+
+                            <!-- Flow Interativo -->
+                            <div class="sos-flow-container">
+                                <div id="step-1" class="step-item active" onclick="window.mudarPassoSOS(1)">1. Conter Sangramento</div>
+                                <div class="step-arrow">➔</div>
+                                <div id="step-2" class="step-item" onclick="window.mudarPassoSOS(2)">2. Fazer Caixa Rápido</div>
+                                <div class="step-arrow">➔</div>
+                                <div id="step-3" class="step-item" onclick="window.mudarPassoSOS(3)">3. Voltar a Investir</div>
+                            </div>
+
+                            <!-- Dica Dinâmica -->
+                            <div id="sos-tip-box" class="sos-tip-card fade-in-up">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 20px;">💡</span>
+                                    <p id="sos-tip-text">Foco inicial: Identifique todos os gastos recorrentes e cancele o que não for vital para sobrevivência.</p>
+                                </div>
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div class="sos-grid-colunas" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                                <!-- Coluna Checklist e Ações Rápidas -->
+                                <div style="display: flex; flex-direction: column; gap: 20px;">
+                                    <div>
+                                        <h3 class="card-title text-muted" style="font-size: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px;">
+                                            Checklist de Resgate
+                                            <span id="sos-progress-badge" class="badge-sos">0% Concluído</span>
+                                        </h3>
+                                        <div class="checklist-sos" id="lista-checklist-sos">
+                                            <!-- JS rendered -->
+                                        </div>
+                                        <button class="btn-dashed-green" style="margin-top: 10px; width: 100%;"
+                                            onclick="window.addItemChecklistSOS()">+ Adicionar Medida Personalizada</button>
+                                    </div>
+
+                                    <div class="glass-card" style="background: rgba(255, 255, 255, 0.03); padding: 15px;">
+                                        <h3 class="card-title text-muted" style="font-size: 13px; margin-bottom: 12px; text-transform: uppercase;">Ações Rápidas de Impacto</h3>
+                                        <div class="sos-actions-grid">
+                                            <button class="action-btn-sos" onclick="window.simularAcaoSOS('streaming')">📺 Cortar Streaming (-R$ 50)</button>
+                                            <button class="action-btn-sos" onclick="window.simularAcaoSOS('delivery')">🍔 Zero Delivery (-R$ 200)</button>
+                                            <button class="action-btn-sos" onclick="window.simularAcaoSOS('renegotiate')">🤝 Renegociar Taxa (-2%)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Coluna Simulador Premium -->
+                                <div class="glass-card inner-calc" style="background: rgba(10, 10, 15, 0.9); border: 1px solid rgba(255, 102, 119, 0.2);">
+                                    <h3 class="card-title text-muted" style="font-size: 14px; margin-bottom: 20px; text-transform: uppercase;">Simulador de Pressão Financeira</h3>
+
+                                    <!-- Sliders -->
+                                    <div class="input-group-premium">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                            <label class="uppercase-label" style="margin: 0;">Dívida Total (R$)</label>
+                                            <input type="number" id="sos-divida-input" value="0" step="100" 
+                                                style="width: 120px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,102,119,0.3); border-radius: 6px; color: var(--accent-red); font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 800; text-align: right; padding: 4px 8px; outline: none;"
+                                                oninput="window.syncSOS('input')">
+                                        </div>
+                                        <input type="range" id="sos-divida-slider" min="0" max="100000" step="500" value="0" class="red-slider" 
+                                            oninput="window.syncSOS('slider')">
+                                    </div>
+
+                                    <div class="input-group-premium">
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <label class="uppercase-label">Taxa de Juros Mensal (%)</label>
+                                            <span class="slider-value" id="val-juros">0%</span>
+                                        </div>
+                                        <input type="range" id="sos-juros-slider" min="0" max="20" step="0.5" value="0" class="red-slider" oninput="window.atualizarDadosSOS()">
+                                    </div>
+
+                                    <div class="input-group-premium">
+                                        <label class="uppercase-label">Gastos Dispensáveis (R$/Mês)</label>
+                                        <input type="number" id="sos-futilidades" placeholder="Ex: 150" value="0"
+                                            oninput="window.atualizarDadosSOS()" style="background: rgba(255, 255, 255, 0.05);">
+                                    </div>
+
+                                    <!-- Métricas em destaque -->
+                                    <div class="sos-stats-grid">
+                                        <div class="sos-stat-item premium">
+                                            <p>Vazamento Mensal</p>
+                                            <h4 id="sos-prejuizo-resultado">R$ 0,00</h4>
+                                            <div class="stat-progress-bg"><div id="vazamento-bar" class="stat-progress-fill"></div></div>
+                                        </div>
+                                        <div class="sos-stat-item premium">
+                                            <p>Autonomia Atual</p>
+                                            <h4 id="sos-autonomia-resultado">N/A</h4>
+                                            <div class="stat-progress-bg"><div id="autonomia-bar" class="stat-progress-fill blue"></div></div>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-red-glow"
+                                        style="width: 100%; margin-top: 25px; padding: 18px;"
+                                        onclick="window.exportarPlanilhaResgate()">📥 Baixar Plano de Resgate (CSV)</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </article>
+                    <!-- FIM SOS FINANCEIRO -->
+                </div>
+
+                <aside id="sidebar-principal" class="sidebar-sticky">
+                    <div id="status-card" class="card glass-card card-destaque">
+                        <label id="label-sobra" class="text-green uppercase-label">Sobra Mensal Estimada</label>
+                        <div id="resultado-sobra" class="valor-gigante">R$ 0,00</div>
+                    </div>
+
+                    <div id="card-grafico-distribuicao" class="card glass-card" style="padding: 20px;">
+                        <h2 class="card-title text-blue" style="font-size: 16px; margin-bottom: 15px;">Distribuição de Despesas</h2>
+                        <div class="chart-container" style="width: 100%;">
+                            <canvas id="meuGrafico"></canvas>
+                        </div>
+                        <div id="distribuicao-legenda"></div>
+                    </div>
+                </aside>
+            </section>
+        </main>
+    </div>
+
+    <datalist id="opcoes-categorias-saida">
+        <option value="Alimentação">
+        <option value="Supermercado">
+        <option value="Transporte">
+        <option value="Saúde">
+        <option value="Lazer">
+        <option value="Contas Residenciais">
+        <option value="Cartão de Crédito / Serviços">
+        <option value="Educação">
+        <option value="Vestuário">
+        <option value="Pix / Transferências">
+        <option value="Outros">
+    </datalist>
+
+    <datalist id="opcoes-categorias-entrada">
+        <option value="Salário">
+        <option value="Pró-labore">
+        <option value="Rendimentos">
+        <option value="Venda">
+        <option value="Reembolso">
+        <option value="TED Recebida">
+        <option value="PIX Recebido">
+        <option value="Presente">
+    </datalist>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../Login/supabase-init.js"></script>
+    <script src="../db.js"></script>
+    <script type="module" src="Sos.js"></script>
+
+</body>
+
+</html>

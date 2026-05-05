@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanza - Data Intelligence</title>
+    <link rel="stylesheet" href="../shared/base.css">
+    <link rel="stylesheet" href="../Dashboard.css">
+    <link rel="stylesheet" href="Perfil.css">
+</head>
+
+<body>
+
+    <div id="main-dashboard">
+        <header class="glass-header">
+            <div class="header-logo-wrapper">
+                <img src="../../logopn.png" alt="Logo">
+                <h1 class="glow-text-blue" style="font-size: 27px; margin: 0;">FINANZA</h1>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="../Inicio/Inicio.html">Início</a>
+                <a href="../Metas/Metas.html">Metas</a>
+                <a href="../Cotacoes/Cotacoes.html">Cotações</a>
+                <a href="../Investimentos/Investimentos.html">Investimentos</a>
+                <a href="../Sos/Sos.html" style="color: #ff6677; font-weight: bold;">🆘 SOS</a>
+                <a class="ativo" href="../Perfil/Perfil.html">Perfil</a>
+            </nav>
+
+            <div class="perfil-usuario">
+                <span id="nome-usuario" class="user-name"></span>
+                <img id="foto-usuario" class="foto-perfil" src="" alt="Foto de Perfil" style="display: none;">
+            </div>
+        </header>
+
+        <main class="main-content">
+
+            <section id="tela-usuario" class="fade-in-up" style="display: block;">
+                <div class="card glass-card user-top-card">
+                    <div class="user-info-box">
+                        <div class="avatar-container">
+                            <img id="img-dash-user" src="" alt="Avatar">
+                            <div class="avatar-ring"></div>
+                        </div>
+                        <div class="user-info-text">
+                            <h2 id="nome-dash-user">Nome</h2>
+                            <p class="badge-user text-blue" id="tipo-conta-badge">Conta Associada</p>
+                            <p id="email-dash-user" class="text-muted">email@finanza.com</p>
+                            <button class="btn-outline-red" id="btn-sair">Sair do Sistema</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="graficos-full-grid">
+                    <!-- SELETOR UNIFICADO DE PERÍODO E FILTRO CUSTOMIZADO -->
+                    <div class="card glass-card" style="grid-column: 1 / -1; margin-bottom: 0; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <label class="uppercase-label" style="margin-bottom: 0; min-width: 120px;">Visualizar
+                                Período:</label>
+                            <select id="periodo-grafico-perfil" class="custom-select"
+                                onchange="window.mudarPeriodoGraficoGlobal(this.value)"
+                                style="width: auto; height: 50px; padding: 0 30px;">
+                                <option value="12meses" selected>🗓️ Últimos 12 Meses</option>
+                                <option value="4semanas">📅 4 Semanas (Mês Atual)</option>
+                                <option value="anos">📈 Visão Anual (Evolução)</option>
+                                <option value="custom">🔍 Período Customizado</option>
+                            </select>
+                        </div>
+
+                        <div id="controles-data-custom" style="display: none; align-items: center; gap: 10px; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 12px; border: 1px solid var(--border-light);">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label class="uppercase-label" style="margin:0; font-size: 10px;">De:</label>
+                                <input type="date" id="data-inicio-perfil" class="custom-select-small" style="width: 140px; padding: 8px;">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <label class="uppercase-label" style="margin:0; font-size: 10px;">Até:</label>
+                                <input type="date" id="data-fim-perfil" class="custom-select-small" style="width: 140px; padding: 8px;">
+                            </div>
+                            <button class="btn-blue btn-small" onclick="window.aplicarFiltroCustomPerfil()" style="padding: 8px 15px !important; margin: 0;">Filtrar</button>
+                        </div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <h3 class="card-title text-muted" style="margin-bottom: 16px;">Balanço: Ganhos x Gastos</h3>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="graficoLargo"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card glass-card">
+                        <div class="card-header-flex"
+                            style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h3 class="card-title text-muted">Projeção de Crescimento Patrimonial</h3>
+                        </div>
+                        <div style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="graficoArea"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <datalist id="opcoes-categorias-saida">
+        <option value="Alimentação">
+        <option value="Supermercado">
+        <option value="Transporte">
+        <option value="Saúde">
+        <option value="Lazer">
+        <option value="Contas Residenciais">
+        <option value="Cartão de Crédito / Serviços">
+        <option value="Educação">
+        <option value="Vestuário">
+        <option value="Pix / Transferências">
+        <option value="Outros">
+    </datalist>
+
+    <datalist id="opcoes-categorias-entrada">
+        <option value="Salário">
+        <option value="Pró-labore">
+        <option value="Rendimentos">
+        <option value="Venda">
+        <option value="Reembolso">
+        <option value="TED Recebida">
+        <option value="PIX Recebido">
+        <option value="Presente">
+    </datalist>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../Login/supabase-init.js"></script>
+    <script src="../db.js"></script>
+    <script type="module" src="Perfil.js"></script>
+
+</body>
+
+</html>

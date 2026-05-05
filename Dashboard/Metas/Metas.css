@@ -1,0 +1,82 @@
+/* Metas.css */
+
+.section-meta-card {
+    background: linear-gradient(145deg, rgba(28, 28, 32, 0.8), rgba(20, 20, 24, 0.9));
+    border: 1px solid rgba(51, 224, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(51, 224, 255, 0.05);
+}
+
+.section-meta-card .card-title {
+    color: var(--accent-blue);
+    text-shadow: 0 0 12px rgba(51, 224, 255, 0.4);
+}
+
+.meta-item {
+    position: relative;
+    padding: 25px;
+    margin-bottom: 20px;
+    background: rgba(10, 10, 12, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    transition: var(--transition);
+}
+
+.meta-item:hover {
+    border-color: rgba(51, 224, 255, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.meta-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 16px;
+    padding-right: 20px;
+}
+
+.strong-value {
+    font-weight: 800;
+    font-size: 20px;
+}
+
+progress {
+    width: 100%;
+    height: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+
+progress::-webkit-progress-bar {
+    background-color: transparent;
+}
+
+progress::-webkit-progress-value {
+    background: linear-gradient(90deg, #00b09b, var(--accent-green));
+    border-radius: 10px;
+    transition: width 1s ease;
+    box-shadow: 0 0 10px var(--glow-green);
+}
+
+.tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tips-list li {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.sidebar-big-num {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-top: 5px;
+}

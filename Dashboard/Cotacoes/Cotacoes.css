@@ -1,0 +1,93 @@
+/* Cotacoes.css */
+
+.cotacoes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.cotacao-card {
+    background: rgba(30, 30, 35, 0.5);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.cotacao-card:hover {
+    transform: translateY(-5px);
+    background: rgba(40, 40, 45, 0.7);
+    border-color: var(--border-highlight);
+}
+
+.cotacao-card.dolar {
+    border-left: 4px solid var(--accent-blue);
+    box-shadow: inset 0 0 20px rgba(51, 224, 255, 0.05);
+}
+
+.cotacao-card.euro {
+    border-left: 4px solid #a55eea;
+    box-shadow: inset 0 0 20px rgba(165, 94, 234, 0.05);
+}
+
+.cotacao-card.btc {
+    border-left: 4px solid #f7931a;
+    box-shadow: inset 0 0 20px rgba(247, 147, 26, 0.05);
+}
+
+.cotacao-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    margin-top: -2px;
+    z-index: 2;
+}
+
+.cotacao-card .moeda-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: -4px;
+}
+
+.cotacao-card .moeda-nome {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.cotacao-card .moeda-valor {
+    font-size: 28px;
+    font-weight: 900;
+    font-family: 'Inter', monospace;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    letter-spacing: -1.8px;
+    line-height: 1;
+    margin-top: 5px;
+}
+
+.cotacao-card .moeda-simbolo {
+    font-size: 42px;
+    opacity: 0.1;
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    transform: rotate(-15deg);
+    font-weight: 900;
+}
+
+@media (max-width: 900px) {
+    .cotacoes-grid {
+        grid-template-columns: 1fr;
+    }
+}

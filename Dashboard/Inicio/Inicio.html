@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanza - Data Intelligence</title>
+    <link rel="stylesheet" href="../shared/base.css">
+    <link rel="stylesheet" href="../Dashboard.css">
+    <link rel="stylesheet" href="Inicio.css">
+</head>
+
+<body>
+
+    <div id="main-dashboard">
+        <header class="glass-header">
+            <div class="header-logo-wrapper">
+                <img src="../../logopn.png" alt="Logo">
+                <h1 class="glow-text-blue" style="font-size: 27px; margin: 0;">FINANZA</h1>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="ativo" href="../Inicio/Inicio.html">Início</a>
+                <a href="../Metas/Metas.html">Metas</a>
+                <a href="../Cotacoes/Cotacoes.html">Cotações</a>
+                <a href="../Investimentos/Investimentos.html">Investimentos</a>
+                <a href="../Sos/Sos.html" style="color: #ff6677; font-weight: bold;">🆘 SOS</a>
+                <a href="../Perfil/Perfil.html">Perfil</a>
+            </nav>
+
+            <div class="perfil-usuario">
+                <span id="nome-usuario" class="user-name"></span>
+                <img id="foto-usuario" class="foto-perfil" src="" alt="Foto de Perfil" style="display: none;">
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section id="tela-operacional" class="section-grid fade-in-up">
+
+                <div class="inputs-column">
+
+                    <article id="aba-inicio" class="sub-aba ativa">
+                        <div class="card glass-card" style="margin-bottom: 20px;">
+                            <div class="card-header-flex"
+                                style="flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;">
+                                <h2 class="card-title text-green" style="margin: 0; white-space: nowrap; display: flex; align-items: center; gap: 10px;">
+                                    Dados Financeiros
+                                    <button onclick="window.apagarTudo()" title="Limpar todos os registros e reiniciar" style="background: none; border: none; cursor: pointer; opacity: 0.3; transition: 0.3s; padding: 4px; display: flex; align-items: center;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-red);"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                    </button>
+                                </h2>
+
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                                    <div class="seletor-periodo-controles"
+                                        style="display: flex; gap: 4px; background: rgba(30, 30, 35, 0.6); padding: 5px; border-radius: 12px; border: 1px solid var(--border-light); align-items: center;">
+                                        <select id="seletor-mes" class="btn-neutral btn-small"
+                                            style="margin: 0; border: none; background: #000; cursor: pointer; color: #fff; font-weight: 700; padding: 8px 12px; border-radius: 8px;">
+                                            <option value="0" style="background: #000;">Janeiro</option>
+                                            <option value="1" style="background: #000;">Fevereiro</option>
+                                            <option value="2" style="background: #000;">Março</option>
+                                            <option value="3" style="background: #000;">Abril</option>
+                                            <option value="4" style="background: #000;">Maio</option>
+                                            <option value="5" style="background: #000;">Junho</option>
+                                            <option value="6" style="background: #000;">Julho</option>
+                                            <option value="7" style="background: #000;">Agosto</option>
+                                            <option value="8" style="background: #000;">Setembro</option>
+                                            <option value="9" style="background: #000;">Outubro</option>
+                                            <option value="10" style="background: #000;">Novembro</option>
+                                            <option value="11" style="background: #000;">Dezembro</option>
+                                        </select>
+                                        <div style="width: 1px; height: 15px; background: rgba(255,255,255,0.1);"></div>
+                                        <select id="seletor-ano" class="btn-neutral btn-small"
+                                            style="margin: 0; border: none; background: #000; cursor: pointer; color: #fff; font-weight: 700; padding: 8px 12px; border-radius: 8px;">
+                                            <!-- Preenchido via JS -->
+                                        </select>
+                                    </div>
+
+                                    <button class="btn-neutral btn-small"
+                                        onclick="document.getElementById('input-extrato').click()"
+                                        style="margin: 0; border-radius: 12px;">📂 Importar CSV</button>
+                                    <input type="file" id="input-extrato" accept=".csv"
+                                        onchange="window.importarExtratoCSV(this)" style="display: none;">
+
+                                    <button class="btn-neutral btn-small" onclick="window.exportarCSV()"
+                                        style="margin: 0; border-radius: 12px;">📊 Exportar</button>
+                                    <button class="btn-neutral btn-small" onclick="window.exportarPDF(this)"
+                                        style="margin: 0; border-radius: 12px;">📄 PDF</button>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label class="uppercase-label">Receita Mensal (R$)</label>
+                                <div id="receita-mensal-exibicao" class="valor-receita-total">R$ 0,00</div>
+                                <input type="hidden" id="salario">
+                            </div>
+
+                            <div class="divider"></div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <label class="uppercase-label" style="margin: 0;">Visualização dos Gastos</label>
+                                <div class="toggle-group-premium">
+                                    <button id="mode-extenso" class="btn-toggle-modo ativo" onclick="window.mudarModoLista('extenso')">Extenso</button>
+                                    <button id="mode-resumo" class="btn-toggle-modo" onclick="window.mudarModoLista('resumo')">Resumo</button>
+                                </div>
+                            </div>
+
+                            <div id="lista-despesas" class="lista-itens"></div>
+                            <button class="btn-dashed-red" onclick="window.addDespesa()">+ Adicionar Gasto (Saída)</button>
+                            <button class="btn-dashed-blue" onclick="window.addReceita()">+ Adicionar Receita (Entrada)</button>
+                        </div>
+                    </article>
+
+                </div>
+
+                <aside id="sidebar-principal" class="sidebar-sticky">
+                    <div id="status-card" class="card glass-card card-destaque">
+                        <label id="label-sobra" class="text-green uppercase-label">Sobra Mensal Estimada</label>
+                        <div id="resultado-sobra" class="valor-gigante">R$ 0,00</div>
+                    </div>
+
+                    <div id="card-grafico-distribuicao" class="card glass-card" style="padding: 20px;">
+                        <h2 class="card-title text-blue" style="font-size: 16px; margin-bottom: 15px;">Distribuição de Despesas</h2>
+                        <div class="chart-container" style="width: 100%;">
+                            <canvas id="meuGrafico"></canvas>
+                        </div>
+                        <div id="distribuicao-legenda"></div>
+                    </div>
+                </aside>
+
+            </section>
+        </main>
+    </div>
+
+    <datalist id="opcoes-categorias-saida">
+        <option value="Alimentação">
+        <option value="Supermercado">
+        <option value="Transporte">
+        <option value="Saúde">
+        <option value="Lazer">
+        <option value="Contas Residenciais">
+        <option value="Cartão de Crédito / Serviços">
+        <option value="Educação">
+        <option value="Vestuário">
+        <option value="Pix / Transferências">
+        <option value="Outros">
+    </datalist>
+
+    <datalist id="opcoes-categorias-entrada">
+        <option value="Salário">
+        <option value="Pró-labore">
+        <option value="Rendimentos">
+        <option value="Venda">
+        <option value="Reembolso">
+        <option value="TED Recebida">
+        <option value="PIX Recebido">
+        <option value="Presente">
+    </datalist>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../Login/supabase-init.js"></script>
+    <script src="../db.js"></script>
+    <script type="module" src="Inicio.js"></script>
+
+</body>
+
+</html>

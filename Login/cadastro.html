@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanza - Criar Conta</title>
+    <meta name="description" content="Crie sua conta Finanza e comece a controlar suas finanças de forma inteligente.">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="cadastro.css">
+</head>
+
+<body>
+    <main id="tela-login">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2" style="background: var(--accent-blue);"></div>
+
+        <div class="login-card fade-in-up">
+
+            <!-- Logo -->
+            <div class="login-logo-wrapper">
+                <img src="../logopn.png" crossorigin="anonymous" alt="Finanza Logo" class="logo-img" style="height: 70px;">
+                <h1 class="title-logo" style="font-size: 26px;">FINANZA</h1>
+            </div>
+
+            <div class="desc-wrapper" style="margin-bottom: 24px;">
+                <h2 class="title-desc" style="font-size: 20px;">Crie sua conta gratuita</h2>
+                <p class="desc">Preencha os dados abaixo para começar a controlar suas finanças.</p>
+            </div>
+
+            <!-- ===== FORMULÁRIO DE CADASTRO ===== -->
+            <form id="form-cadastro" autocomplete="on" novalidate>
+
+                <div class="input-field-group">
+                    <label for="cad-nome" class="input-label">Nome completo</label>
+                    <input
+                        type="text"
+                        id="cad-nome"
+                        name="name"
+                        placeholder="Seu nome completo"
+                        autocomplete="name"
+                        required
+                    >
+                </div>
+
+                <div class="input-field-group">
+                    <label for="cad-email" class="input-label">E-mail</label>
+                    <input
+                        type="email"
+                        id="cad-email"
+                        name="email"
+                        placeholder="seu@email.com"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+
+                <div class="input-field-group">
+                    <label for="cad-senha" class="input-label">Senha</label>
+                    <div class="senha-wrapper">
+                        <input
+                            type="password"
+                            id="cad-senha"
+                            name="password"
+                            placeholder="Mínimo 6 caracteres"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <button type="button" class="btn-olho" id="btn-toggle-cad-senha" title="Mostrar/Ocultar senha">
+                            👁
+                        </button>
+                    </div>
+                    <!-- Indicador de força da senha -->
+                    <div class="forca-senha-wrapper" id="forca-wrapper">
+                        <div class="forca-barra" id="forca-barra"></div>
+                    </div>
+                    <p class="forca-label" id="forca-label"></p>
+                </div>
+
+                <div class="input-field-group">
+                    <label for="cad-confirma" class="input-label">Confirmar senha</label>
+                    <div class="senha-wrapper">
+                        <input
+                            type="password"
+                            id="cad-confirma"
+                            name="confirm-password"
+                            placeholder="Repita a senha"
+                            autocomplete="new-password"
+                            required
+                        >
+                        <button type="button" class="btn-olho" id="btn-toggle-cad-confirma">
+                            👁
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mensagem de feedback -->
+                <p id="msg-erro-cadastro" class="msg-erro hidden"></p>
+
+                <button type="submit" class="btn-entrar btn-cadastrar" id="btn-cadastrar">
+                    ✨ Criar minha conta
+                </button>
+            </form>
+
+            <!-- Link voltar ao login -->
+            <p class="link-cadastro" style="margin-top: 20px;">
+                Já tem uma conta?
+                <a href="login.html">Entrar →</a>
+            </p>
+
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-init.js"></script>
+    <script src="cadastro.js"></script>
+</body>
+
+</html>

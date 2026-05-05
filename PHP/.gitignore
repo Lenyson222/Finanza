@@ -1,0 +1,6 @@
+# Credenciais e configurações sensíveis — NUNCA versionar
+.env
+
+# Banco de dados gerado localmente
+*.sqlite
+*.db

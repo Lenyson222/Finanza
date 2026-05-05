@@ -1,0 +1,400 @@
+/* =========================================
+   1. IMPORTAÇÕES E VARIÁVEIS DE CORES
+========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+:root {
+    --bg-base: #101012;
+    --text-main: #f0f0f5;
+    --text-muted: #9a9ab0;
+    --accent-blue: #33e0ff;
+    --accent-green: #33ffb8;
+    --accent-red: #ff6677;
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-highlight: rgba(255, 255, 255, 0.15);
+    --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   2. TELA DE LOGIN E ANIMAÇÕES
+========================================= */
+#tela-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 30px 15px;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.35;
+    z-index: 0;
+    animation: float 20s infinite ease-in-out;
+}
+
+.blob-1 {
+    width: 450px;
+    height: 450px;
+    background: var(--accent-blue);
+    top: -100px;
+    left: -100px;
+}
+
+.blob-2 {
+    width: 550px;
+    height: 550px;
+    background: var(--accent-green);
+    bottom: -150px;
+    right: -100px;
+    animation-delay: -10s;
+}
+
+.login-card {
+    background: linear-gradient(145deg, rgba(28, 28, 32, 0.7) 0%, rgba(16, 16, 18, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-light);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    padding: 45px;
+    text-align: center;
+    width: 90%;
+    max-width: 460px;
+    z-index: 10;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   3. LOGO, NOME E BADGE
+========================================= */
+.login-logo-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.logo-img {
+    height: 100px;
+    width: auto;
+    display: block;
+}
+
+.title-logo {
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    color: #fff;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.desc-wrapper {
+    margin-bottom: 20px;
+}
+
+.title-desc {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.desc {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.frase-badge-container {
+    margin-bottom: 28px;
+}
+
+.badge {
+    background: rgba(51, 224, 255, 0.15);
+    color: var(--accent-blue);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid rgba(51, 224, 255, 0.2);
+    display: inline-block;
+}
+
+/* =========================================
+   4. FORMULÁRIO EMAIL / SENHA
+========================================= */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.input-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.input-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(51, 224, 255, 0.12);
+}
+
+input::placeholder {
+    color: rgba(154, 154, 176, 0.5);
+}
+
+/* Wrapper do campo senha com ícone olho */
+.senha-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.senha-wrapper input {
+    padding-right: 46px;
+}
+
+.btn-olho {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--text-muted);
+    padding: 0;
+    width: auto !important;
+    height: auto !important;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.btn-olho:hover {
+    color: var(--text-main);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Mensagem de erro */
+.msg-erro {
+    font-size: 13px;
+    color: var(--accent-red);
+    background: rgba(255, 102, 119, 0.1);
+    border: 1px solid rgba(255, 102, 119, 0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================
+   5. BOTÕES
+========================================= */
+button {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: none;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Botão principal — Entrar com email */
+.btn-entrar {
+    background: linear-gradient(135deg, var(--accent-blue), #0090cc);
+    color: #101012;
+    font-weight: 700;
+    margin-top: 4px;
+    box-shadow: 0 4px 20px rgba(51, 224, 255, 0.25);
+}
+
+.btn-entrar:hover {
+    box-shadow: 0 8px 30px rgba(51, 224, 255, 0.4);
+}
+
+/* Botão Google */
+.btn-google {
+    background: #fff;
+    color: #121214;
+    width: 100% !important;
+    height: 50px !important;
+}
+
+/* Botão Convidado */
+.btn-guest {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-light);
+    color: var(--text-main);
+    width: 100% !important;
+    height: 50px !important;
+}
+
+.btn-guest:hover {
+    border-color: var(--border-highlight);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================
+   6. DIVISOR E LINK CADASTRO
+========================================= */
+.divider-text {
+    margin: 22px 0;
+    color: var(--text-muted);
+    font-size: 12px;
+    position: relative;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.divider-text::before,
+.divider-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 35%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+}
+
+.divider-text::before { left: 0; }
+.divider-text::after { right: 0; }
+
+.link-cadastro {
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.link-cadastro a {
+    color: var(--accent-green);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.link-cadastro a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* =========================================
+   7. TOAST DE NOTIFICAÇÃO
+========================================= */
+.toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(51, 255, 184, 0.15), rgba(51, 255, 184, 0.05));
+    border: 1px solid rgba(51, 255, 184, 0.4);
+    color: var(--accent-green);
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(51, 255, 184, 0.15);
+    animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    white-space: nowrap;
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
