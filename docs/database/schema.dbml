@@ -128,21 +128,3 @@ Table sos_calculos {
   Note: "Persiste o último estado do simulador SOS. Relação 1-para-1 com usuarios."
 }
 
-// ---------------------------------------------------------
-// RELACIONAMENTOS (Ref declarados fora das tabelas)
-// ---------------------------------------------------------
-
-// Um usuário tem MUITAS transações
-Ref: transacoes.usuario_id > usuarios.id
-
-// Uma categoria classifica MUITAS transações
-Ref: transacoes.categoria_id > categorias.id
-
-// Um usuário tem MUITAS metas
-Ref: metas.usuario_id > usuarios.id
-
-// Um usuário tem MUITOS itens de checklist SOS
-Ref: sos_checklist_itens.usuario_id > usuarios.id
-
-// Um usuário tem UM cálculo SOS (1-para-1)
-Ref: sos_calculos.usuario_id - usuarios.id
