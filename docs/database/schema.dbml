@@ -1,0 +1,148 @@
+// ============================================================
+// Finanza — Modelagem do Banco de Dados
+// Arquivo: docs/database/schema.dbml
+// Ferramenta: dbdiagram.io  |  Sintaxe: DBML v2
+// ============================================================
+
+// ---------------------------------------------------------
+// TABELA: usuarios
+// Representa a conta de cada usuário da plataforma Finanza.
+// Suporta login via Google (OAuth) e e-mail/senha.
+// ---------------------------------------------------------
+Table usuarios {
+  id          varchar     [primary key, note: "UUID gerado pelo Supabase Auth"]
+  nome        varchar(150) [not null, note: "Nome completo do usuário"]
+  email       varchar(255) [unique, not null, note: "E-mail único — chave de autenticação"]
+  avatar_url  text        [note: "URL da foto de perfil (Google Avatar ou upload)"]
+  tipo_auth   varchar(20) [not null, default: "email", note: "Tipo de autenticação: 'google' | 'email'"]
+  criado_em   timestamp   [not null, default: `now()`, note: "Data de cadastro"]
+  atualizado_em timestamp [not null, default: `now()`, note: "Última atualização do perfil"]
+
+  indexes {
+    email [unique, name: "uq_usuarios_email"]
+  }
+
+  Note: "Centraliza dados de autenticação. Relaciona com todas as entidades financeiras."
+}
+
+// ---------------------------------------------------------
+// TABELA: categorias
+// Tabela de domínio para categorias de transações.
+// Normalização da string 'categoria' que estava inline.
+// ---------------------------------------------------------
+Table categorias {
+  id          integer     [primary key, increment]
+  nome        varchar(80) [unique, not null, note: "Ex: Alimentação, Salário, Transporte"]
+  tipo        varchar(10) [not null, note: "'entrada' ou 'saida'"]
+  icone       varchar(10) [note: "Emoji ou código do ícone para exibição na UI"]
+  cor_hex     varchar(7)  [note: "Cor de destaque no gráfico. Ex: #33e0ff"]
+  criado_em   timestamp   [not null, default: `now()`]
+
+  indexes {
+    nome [unique, name: "uq_categorias_nome"]
+  }
+
+  Note: "Normaliza as categorias — evita strings duplicadas nas transações."
+}
+
+// ---------------------------------------------------------
+// TABELA: transacoes
+// Entidade principal do sistema financeiro.
+// Armazena receitas (Entrada) e despesas (Saída).
+// Era a store 'despesas' do IndexedDB no frontend.
+// ---------------------------------------------------------
+Table transacoes {
+  id            integer      [primary key, increment]
+  usuario_id    varchar      [not null, ref: > usuarios.id, note: "FK — owner da transação"]
+  categoria_id  integer      [not null, ref: > categorias.id, note: "FK — tipo de gasto/receita"]
+  descricao     varchar(255) [not null, note: "Descrição livre da transação"]
+  valor         decimal(15,2) [not null, note: "Valor absoluto positivo em BRL"]
+  tipo          varchar(10)  [not null, note: "'Entrada' ou 'Saida'"]
+  data          date         [not null, note: "Data de competência da transação"]
+  mes           smallint     [not null, note: "Mês da transação (0–11) — otimiza filtros mensais"]
+  ano           smallint     [not null, note: "Ano da transação — otimiza filtros anuais"]
+  criado_em     timestamp    [not null, default: `now()`]
+  atualizado_em timestamp    [not null, default: `now()`]
+
+  indexes {
+    (usuario_id, ano, mes) [name: "idx_transacoes_usuario_periodo"]
+    (usuario_id, tipo)     [name: "idx_transacoes_usuario_tipo"]
+  }
+
+  Note: "Registra todas as movimentações financeiras. Equivalente à store IndexedDB 'despesas'."
+}
+
+// ---------------------------------------------------------
+// TABELA: metas
+// Metas financeiras do usuário (ex.: reserva de emergência).
+// ---------------------------------------------------------
+Table metas {
+  id                  integer      [primary key, increment]
+  usuario_id          varchar      [not null, ref: > usuarios.id, note: "FK — owner da meta"]
+  nome                varchar(150) [not null, note: "Nome da meta. Ex: Viagem para Europa"]
+  valor_alvo          decimal(15,2) [not null, note: "Valor em BRL que o usuário quer atingir"]
+  porcentagem_sobra   decimal(5,2) [not null, default: 0, note: "% da sobra mensal alocada para esta meta"]
+  ativa               boolean      [not null, default: true, note: "Se false, a meta foi arquivada"]
+  criado_em           timestamp    [not null, default: `now()`]
+  atualizado_em       timestamp    [not null, default: `now()`]
+
+  indexes {
+    usuario_id [name: "idx_metas_usuario"]
+  }
+
+  Note: "Cada meta recebe uma fatia percentual da sobra mensal calculada no Dashboard."
+}
+
+// ---------------------------------------------------------
+// TABELA: sos_checklist_itens
+// Itens do checklist de emergência financeira (aba SOS).
+// ---------------------------------------------------------
+Table sos_checklist_itens {
+  id          integer     [primary key, increment]
+  usuario_id  varchar     [not null, ref: > usuarios.id, note: "FK — owner do checklist"]
+  texto       text        [not null, note: "Descrição da ação de recuperação financeira"]
+  checked     boolean     [not null, default: false, note: "Indica se o item foi concluído"]
+  ordem       smallint    [not null, default: 0, note: "Ordem de exibição na lista"]
+  criado_em   timestamp   [not null, default: `now()`]
+
+  indexes {
+    (usuario_id, checked) [name: "idx_sos_usuario_checked"]
+  }
+
+  Note: "Armazena o estado do checklist SOS por usuário. Padrão: 5 itens pré-definidos."
+}
+
+// ---------------------------------------------------------
+// TABELA: sos_calculos
+// Dados do simulador de dívidas da aba SOS.
+// Persiste o último cálculo realizado pelo usuário.
+// ---------------------------------------------------------
+Table sos_calculos {
+  id              integer      [primary key, increment]
+  usuario_id      varchar      [unique, not null, ref: - usuarios.id, note: "FK 1-para-1 — um cálculo por usuário"]
+  divida_total    decimal(15,2) [note: "Soma total das dívidas ativas"]
+  taxa_juros      decimal(5,2) [note: "Taxa de juros anual (%) aplicada"]
+  gasto_futilidades decimal(15,2) [note: "Valor gasto em não-essenciais por mês"]
+  calculado_em    timestamp    [not null, default: `now()`]
+
+  Note: "Persiste o último estado do simulador SOS. Relação 1-para-1 com usuarios."
+}
+
+// ---------------------------------------------------------
+// RELACIONAMENTOS (Ref declarados fora das tabelas)
+// ---------------------------------------------------------
+
+// Um usuário tem MUITAS transações
+Ref: transacoes.usuario_id > usuarios.id
+
+// Uma categoria classifica MUITAS transações
+Ref: transacoes.categoria_id > categorias.id
+
+// Um usuário tem MUITAS metas
+Ref: metas.usuario_id > usuarios.id
+
+// Um usuário tem MUITOS itens de checklist SOS
+Ref: sos_checklist_itens.usuario_id > usuarios.id
+
+// Um usuário tem UM cálculo SOS (1-para-1)
+Ref: sos_calculos.usuario_id - usuarios.id
