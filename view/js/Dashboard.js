@@ -12,7 +12,7 @@ async function validarAcesso() {
         const sessaoLocal = localStorage.getItem("SessaoFinanza");
 
         if (!session && !sessaoLocal) {
-            window.location.href = "../Login/login.html";
+            window.location.href = "login.html";
             return;
         }
 
@@ -1032,7 +1032,7 @@ if (btnSair) {
         // Desloga do Supabase e limpa sessão local
         await supabase.auth.signOut();
         localStorage.removeItem("SessaoFinanza");
-        window.location.href = "../Login/login.html";
+        window.location.href = "login.html";
     });
 }
 // ====================================================================

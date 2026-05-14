@@ -70,7 +70,7 @@ async function inicializarPerfil() {
                 await supabase.auth.signOut();
             }
             localStorage.removeItem("SessaoFinanza");
-            window.location.href = "../../Login/login.html";
+            window.location.href = "login.html";
         });
     }
 

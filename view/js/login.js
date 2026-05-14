@@ -1,6 +1,6 @@
 // login.js — Lógica completa da tela de login
 
-const DASHBOARD_URL = '../Dashboard/Inicio/Inicio.html';
+const DASHBOARD_URL = 'Inicio/Inicio.html';
 
 // ─── Mostrar toast de sucesso do cadastro ───────────────────────────────────
 const params = new URLSearchParams(window.location.search);

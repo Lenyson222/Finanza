@@ -9,27 +9,27 @@ export function renderHeader(sectionId) {
         </div>
 
         <nav class="nav-menu" id="nav-principal" role="navigation">
-            <a href="../Inicio/Inicio.html" id="nav-inicio" class="nav-link ${sectionId === 'inicio' ? 'ativo' : ''}">
+            <a href="Inicio.html" id="nav-inicio" class="nav-link ${sectionId === 'inicio' ? 'ativo' : ''}">
                 <span class="nav-label">Início</span>
             </a>
-            <a href="../Metas/Metas.html" id="nav-meta" class="nav-link ${sectionId === 'meta' ? 'ativo' : ''}">
+            <a href="Metas.html" id="nav-meta" class="nav-link ${sectionId === 'meta' ? 'ativo' : ''}">
                 <span class="nav-label">Metas</span>
             </a>
-            <a href="../Cotacoes/Cotacoes.html" id="nav-cotacao" class="nav-link ${sectionId === 'cotacao' ? 'ativo' : ''}">
+            <a href="Cotacoes.html" id="nav-cotacao" class="nav-link ${sectionId === 'cotacao' ? 'ativo' : ''}">
                 <span class="nav-label">Cotações</span>
             </a>
-            <a href="../Investimentos/Investimentos.html" id="nav-investimento" class="nav-link ${sectionId === 'investimento' ? 'ativo' : ''}">
+            <a href="Investimentos.html" id="nav-investimento" class="nav-link ${sectionId === 'investimento' ? 'ativo' : ''}">
                 <span class="nav-label">Investimentos</span>
             </a>
-            <a href="../Sos/Sos.html" id="nav-sos" class="nav-link nav-sos ${sectionId === 'sos' ? 'ativo' : ''}">
+            <a href="Sos.html" id="nav-sos" class="nav-link nav-sos ${sectionId === 'sos' ? 'ativo' : ''}">
                 <span class="nav-label">SOS</span>
             </a>
-            <a href="../Perfil/Perfil.html" id="nav-usuario" class="nav-link ${sectionId === 'usuario' ? 'ativo' : ''}">
+            <a href="Perfil.html" id="nav-usuario" class="nav-link ${sectionId === 'usuario' ? 'ativo' : ''}">
                 <span class="nav-label">Perfil</span>
             </a>
         </nav>
 
-        <div class="perfil-usuario" onclick="window.location.href='../Perfil/Perfil.html'">
+        <div class="perfil-usuario" onclick="window.location.href='Perfil.html'">
             <span id="nome-usuario" class="user-name">Carregando...</span>
             <img id="foto-usuario" class="foto-perfil" src="" alt="Foto de Perfil" style="display: none;">
         </div>
@@ -67,7 +67,7 @@ export async function validarAcesso() {
         const sessaoLocal = localStorage.getItem("SessaoFinanza");
 
         if (!session && !sessaoLocal) {
-            window.location.href = "../../Login/login.html";
+            window.location.href = "login.html";
             return false;
         }
 
