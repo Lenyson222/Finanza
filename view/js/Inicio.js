@@ -1,5 +1,5 @@
-import { renderHeader, validarAcesso } from '../shared/header.js';
-import { importarExtratoCSV } from '../shared/parser.js';
+import { renderHeader, validarAcesso } from './header.js';
+import { importarExtratoCSV } from './parser.js';
 
 // 1. CARREGAMENTO DA INTERFACE E MENU
 

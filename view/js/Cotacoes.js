@@ -1,4 +1,4 @@
-import { renderHeader, validarAcesso } from '../shared/header.js';
+import { renderHeader, validarAcesso } from './header.js';
 
 
 

@@ -15,9 +15,31 @@ class Router
     public function dispatch(): void
     {
         $method = $_SERVER['REQUEST_METHOD'];
+        $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        if ($method === 'GET' && ($uri === '/' || $uri === '' || $uri === '/index.php')) {
+            header('Location: /view/html/login.html');
+            exit;
+        }
 
         if ($method === 'GET') {
-            // Requisições GET exibem o formulário de matrícula
+            // 1. Verificar se a URI aponta para um arquivo HTML existente em view/html
+            // Remover '/view/html' da URI se ele já estiver lá (para evitar duplicação no path)
+            $cleanUri = str_replace('/view/html', '', $uri);
+            $filePath = VIEW_PATH . '/html/' . ltrim($cleanUri, '/');
+
+            if (file_exists($filePath) && is_file($filePath)) {
+                require $filePath;
+                exit;
+            }
+
+            // 2. Se não encontrar o arquivo, mas for uma rota de "Dashboard", redirecionar para a plana
+            if (strpos($uri, 'Inicio/Inicio.html') !== false) {
+                header('Location: /view/html/Inicio.html');
+                exit;
+            }
+
+            // Fallback: Requisições GET que não são arquivos estáticos exibem o formulário de matrícula
             require VIEW_PATH . '/matricula.php';
 
         } elseif ($method === 'POST') {

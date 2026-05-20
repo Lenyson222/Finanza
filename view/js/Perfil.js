@@ -1,4 +1,4 @@
-import { renderHeader, validarAcesso, parseNumber } from '../shared/header.js';
+import { renderHeader, validarAcesso, parseNumber } from './header.js';
 
 
 

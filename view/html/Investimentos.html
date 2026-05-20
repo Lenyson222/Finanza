@@ -24,7 +24,7 @@
                 <a href="Metas.html">Metas</a>
                 <a href="Cotacoes.html">Cotações</a>
                 <a class="ativo" href="Investimentos.html">Investimentos</a>
-                <a href="Sos.html" style="color: #ff6677; font-weight: bold;">🆘 SOS</a>
+                <a href="Sos.html">Simulador de Juros</a>
                 <a href="Perfil.html">Perfil</a>
             </nav>
 
@@ -35,12 +35,9 @@
         </header>
 
         <main class="main-content">
-            <section id="tela-operacional" class="section-grid fade-in-up">
-
+            <section id="tela-operacional" class="section-grid layout-full fade-in-up">
                 <div class="inputs-column">
-
                     <article id="aba-investimento" class="sub-aba ativa">
-
                         <div class="card glass-card" style="display: flex; flex-direction: column; gap: 20px;">
                             <h2 class="card-title text-blue">Análise Gráfica de Ativos</h2>
                             <p class="text-muted">Acompanhe a cotação em tempo real de ações Brasileiras, Fundos e
@@ -90,24 +87,9 @@
                             </div>
                         </div>
                     </article>
-
                 </div>
-
-                <aside id="sidebar-principal" class="sidebar-sticky">
-                    <div id="status-card" class="card glass-card card-destaque">
-                        <label id="label-sobra" class="text-green uppercase-label">Sobra Mensal Estimada</label>
-                        <div id="resultado-sobra" class="valor-gigante">R$ 0,00</div>
-                    </div>
-
-                    <div id="card-grafico-distribuicao" class="card glass-card" style="padding: 20px;">
-                        <h2 class="card-title text-blue" style="font-size: 16px; margin-bottom: 15px;">Distribuição de Despesas</h2>
-                        <div class="chart-container" style="width: 100%;">
-                            <canvas id="meuGrafico"></canvas>
-                        </div>
-                        <div id="distribuicao-legenda"></div>
-                    </div>
-                </aside>
             </section>
+
         </main>
     </div>
 

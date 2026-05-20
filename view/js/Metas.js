@@ -1,4 +1,4 @@
-import { renderHeader, parseNumber, validarAcesso } from '../shared/header.js';
+import { renderHeader, parseNumber, validarAcesso } from './header.js';
 
 
 
@@ -10,6 +10,46 @@ window.dados = {
 };
 
 let sobraAtual = 0;
+let chartDoughnut;
+
+function initChart() {
+    if (typeof Chart === "undefined") return;
+    Chart.defaults.color = '#9a9ab0';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    if (chartDoughnut) chartDoughnut.destroy();
+
+    const canvas1 = document.getElementById('meuGrafico');
+    if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        chartDoughnut = new Chart(ctx1, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: ['#00b09b', '#33e0ff', '#a55eea', '#ffd700', '#ff9f43', '#ff6677'], borderWidth: 0, hoverOffset: 4 }] },
+            options: { plugins: { legend: { display: false } }, cutout: '70%', maintainAspectRatio: true, aspectRatio: 1 },
+            plugins: [{
+                id: 'htmlLegend',
+                afterUpdate(chart) {
+                    const legendEl = document.getElementById('distribuicao-legenda');
+                    if (!legendEl) return;
+                    const labels = chart.data.labels || [];
+                    const colors = chart.data.datasets[0]?.backgroundColor || [];
+                    const valores = chart.data.datasets[0]?.data || [];
+                    
+                    legendEl.innerHTML = labels.map((label, i) => {
+                        const cor = colors[i % colors.length];
+                        const valFormatado = valores[i].toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                        return `<div class="leg-item" style="display: flex; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 6px; transition: background 0.2s ease;">
+                            <span class="leg-cor" style="background:${cor}; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;"></span>
+                            <span class="leg-nome" style="flex: 1; font-size: 13px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${label}</span>
+                            <span class="leg-pct" style="font-size: 12px; font-weight: 700; color: var(--text-muted); min-width: 34px; text-align: right;">${valFormatado}</span>
+                        </div>`;
+                    }).join('');
+                }
+            }]
+        });
+    }
+}
 
 async function inicializarMetas() {
     const acessoOk = await validarAcesso();
@@ -29,6 +69,7 @@ async function inicializarMetas() {
     }
 
     calcularSobraBase();
+    initChart();
     window.renderMetas();
 }
 
@@ -67,7 +108,7 @@ function calcularSobraBase() {
     } catch(e) {}
 
     sobraAtual = totalEntradas - totalSaidas - vazamentoSOS;
-    const rs = document.getElementById('resultado-sobra-metas');
+    const rs = document.getElementById('resultado-sobra');
     if (rs) {
         if (sobraAtual < 0) {
             rs.className = "sidebar-big-num text-red";
@@ -92,15 +133,25 @@ window.renderMetas = function () {
                     </div>
                 </div>
                 <label class="uppercase-label text-muted">Aporte Mensal (% da sobra total - R$ ${sobraAtual > 0 ? sobraAtual.toFixed(2) : '0'})</label>
-                <input type="number" value="${m.porcentagemSobra}" step="1" max="100" min="0" onchange="window.atualizarMetaPorcentagem(${i}, this.value)" 
-                    style="width: 100px; padding: 10px; border-radius: 8px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.5); color: #fff;"> %
+                <div class="input-row fade-in-up" style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
+                    <input type="number" value="${m.porcentagemSobra}" step="1" max="100" min="0" onchange="window.atualizarMetaPorcentagem(${i}, this.value)" 
+                        style="width: 100px; padding: 10px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 10, 12, 0.6); color: #fff; font-size: 16px; font-weight: 600;" placeholder="0">
+                    <span style="color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 12px;">% do valor</span>
+                </div>
                 <progress id="prog-${i}" value="0" max="100"></progress>
             </div>`).join('');
     }
     
+    let labelsGrafico = [];
+    let dadosGrafico = [];
+
     // Atualiza lógica dos valores de sobra baseados em %
     window.dados.metas.forEach((m, i) => {
         const valorAporte = sobraAtual > 0 ? sobraAtual * (m.porcentagemSobra / 100) : 0;
+        
+        labelsGrafico.push(m.nome || 'Meta');
+        dadosGrafico.push(valorAporte);
+
         const prog = document.getElementById(`prog-${i}`); 
         const txt = document.getElementById(`txt-${i}`);
         if (prog && txt) {
@@ -109,6 +160,12 @@ window.renderMetas = function () {
             txt.textContent = valorAporte.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); 
         }
     });
+
+    if (chartDoughnut) {
+        chartDoughnut.data.labels = labelsGrafico;
+        chartDoughnut.data.datasets[0].data = dadosGrafico;
+        chartDoughnut.update();
+    }
 }
 
 window.atualizarMetaNome = function (index, valor) { window.dados.metas[index].nome = valor; window.salvarMetasLocal(); }

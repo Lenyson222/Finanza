@@ -1,6 +1,6 @@
 // login.js — Lógica completa da tela de login
 
-const DASHBOARD_URL = 'Inicio/Inicio.html';
+const DASHBOARD_URL = 'Inicio.html';
 
 // ─── Mostrar toast de sucesso do cadastro ───────────────────────────────────
 const params = new URLSearchParams(window.location.search);
@@ -118,7 +118,7 @@ if (botaoGoogle) {
             provider: 'google',
             options: {
                 redirectTo: window.location.origin +
-                    window.location.pathname.replace('Login/login.html', 'Dashboard/Inicio/Inicio.html')
+                    window.location.pathname.replace('login.html', 'Inicio.html')
             }
         });
 

@@ -24,7 +24,7 @@
                 <a href="Metas.html">Metas</a>
                 <a href="Cotacoes.html">Cotações</a>
                 <a href="Investimentos.html">Investimentos</a>
-                <a class="ativo" href="Sos.html" style="color: #ff6677; font-weight: bold;">🆘 SOS</a>
+                <a class="ativo" href="Sos.html">Simulador de Juros</a>
                 <a href="Perfil.html">Perfil</a>
             </nav>
 
@@ -41,114 +41,47 @@
 
                     <!-- INÍCIO SOS FINANCEIRO -->
                     <article id="aba-sos" class="sub-aba ativa">
-                        <div class="card glass-card"
-                            style="border-color: rgba(255, 102, 119, 0.4); box-shadow: 0 0 20px rgba(255, 102, 119, 0.1);">
-                            
-                            <!-- Header SOS Premium -->
-                            <div class="card-header-flex" style="flex-wrap: wrap; gap: 10px;">
-                                <div style="display: flex; align-items: center; gap: 15px;">
-                                    <div class="sos-pulse-container">
-                                        <div class="sos-pulse-circle"></div>
-                                        <span style="font-size: 24px; position: relative; z-index: 2;">🚨</span>
+                        <div class="card glass-card sos-main-card">
+                            <div class="card-header-flex" style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-light);">
+                                <h2 class="card-title text-blue" style="margin: 0; font-size: 22px;">Simulador de Juros</h2>
+                            </div>
+                            <div class="sos-grid-colunas" style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+                                <div class="glass-card inner-calc" style="background: rgba(10, 10, 15, 0.6); border: 1px solid var(--border-light); padding: 25px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                        <h4 class="card-title text-main" style="font-size: 16px; margin: 0;">Calculadora de Juros</h4>
+                                        <select id="calc-tipo-juros" class="custom-select" style="width: auto; padding: 6px 12px; font-size: 13px;" onchange="window.calcularJurosUnificado()">
+                                            <option value="simples">Juros Simples</option>
+                                            <option value="composto">Juros Compostos</option>
+                                        </select>
                                     </div>
-                                    <h2 class="card-title text-red" style="margin: 0;">Operação Resgate: Controle Total</h2>
-                                </div>
-                                <p class="text-muted" style="width: 100%;">Ajuste os controles abaixo para simular o impacto do tempo e dos juros na sua vida financeira.</p>
-                            </div>
-
-                            <!-- Flow Interativo -->
-                            <div class="sos-flow-container">
-                                <div id="step-1" class="step-item active" onclick="window.mudarPassoSOS(1)">1. Conter Sangramento</div>
-                                <div class="step-arrow">➔</div>
-                                <div id="step-2" class="step-item" onclick="window.mudarPassoSOS(2)">2. Fazer Caixa Rápido</div>
-                                <div class="step-arrow">➔</div>
-                                <div id="step-3" class="step-item" onclick="window.mudarPassoSOS(3)">3. Voltar a Investir</div>
-                            </div>
-
-                            <!-- Dica Dinâmica -->
-                            <div id="sos-tip-box" class="sos-tip-card fade-in-up">
-                                <div style="display: flex; align-items: center; gap: 12px;">
-                                    <span style="font-size: 20px;">💡</span>
-                                    <p id="sos-tip-text">Foco inicial: Identifique todos os gastos recorrentes e cancele o que não for vital para sobrevivência.</p>
-                                </div>
-                            </div>
-
-                            <div class="divider"></div>
-
-                            <div class="sos-grid-colunas" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                                <!-- Coluna Checklist e Ações Rápidas -->
-                                <div style="display: flex; flex-direction: column; gap: 20px;">
-                                    <div>
-                                        <h3 class="card-title text-muted" style="font-size: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px;">
-                                            Checklist de Resgate
-                                            <span id="sos-progress-badge" class="badge-sos">0% Concluído</span>
-                                        </h3>
-                                        <div class="checklist-sos" id="lista-checklist-sos">
-                                            <!-- JS rendered -->
-                                        </div>
-                                        <button class="btn-dashed-green" style="margin-top: 10px; width: 100%;"
-                                            onclick="window.addItemChecklistSOS()">+ Adicionar Medida Personalizada</button>
+                                    
+                                    <div class="input-group">
+                                        <label class="uppercase-label">Capital Inicial (R$)</label>
+                                        <input type="number" id="calc-capital" placeholder="Ex: 1000" oninput="window.calcularJurosUnificado()">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="uppercase-label">Taxa de Juros ao Mês (%)</label>
+                                        <input type="number" id="calc-taxa" placeholder="Ex: 1.5" step="0.1" oninput="window.calcularJurosUnificado()">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="uppercase-label">Tempo (Meses)</label>
+                                        <input type="number" id="calc-tempo" placeholder="Ex: 12" oninput="window.calcularJurosUnificado()">
                                     </div>
 
-                                    <div class="glass-card" style="background: rgba(255, 255, 255, 0.03); padding: 15px;">
-                                        <h3 class="card-title text-muted" style="font-size: 13px; margin-bottom: 12px; text-transform: uppercase;">Ações Rápidas de Impacto</h3>
-                                        <div class="sos-actions-grid">
-                                            <button class="action-btn-sos" onclick="window.simularAcaoSOS('streaming')">📺 Cortar Streaming (-R$ 50)</button>
-                                            <button class="action-btn-sos" onclick="window.simularAcaoSOS('delivery')">🍔 Zero Delivery (-R$ 200)</button>
-                                            <button class="action-btn-sos" onclick="window.simularAcaoSOS('renegotiate')">🤝 Renegociar Taxa (-2%)</button>
+                                    <div class="divider" style="margin: 20px 0;"></div>
+                                    
+                                    <div class="sos-stats-grid" style="grid-template-columns: 1fr;">
+                                        <div class="sos-stat-item" style="border-left: 4px solid var(--accent-blue); padding-left: 15px; background: transparent; border-radius: 0;">
+                                            <p style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px;">Juros Gerados</p>
+                                            <h5 id="calc-resultado-juros" class="text-blue" style="font-size: 20px; font-weight: 800; font-family: monospace;">R$ 0,00</h5>
+                                            <div style="margin-top: 15px;"></div>
+                                            <p style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px;">Montante Total</p>
+                                            <h4 id="calc-resultado-montante" style="font-size: 28px; font-weight: 900; color: #fff; letter-spacing: -1px;">R$ 0,00</h4>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Coluna Simulador Premium -->
-                                <div class="glass-card inner-calc" style="background: rgba(10, 10, 15, 0.9); border: 1px solid rgba(255, 102, 119, 0.2);">
-                                    <h3 class="card-title text-muted" style="font-size: 14px; margin-bottom: 20px; text-transform: uppercase;">Simulador de Pressão Financeira</h3>
-
-                                    <!-- Sliders -->
-                                    <div class="input-group-premium">
-                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                            <label class="uppercase-label" style="margin: 0;">Dívida Total (R$)</label>
-                                            <input type="number" id="sos-divida-input" value="0" step="100" 
-                                                style="width: 120px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,102,119,0.3); border-radius: 6px; color: var(--accent-red); font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 800; text-align: right; padding: 4px 8px; outline: none;"
-                                                oninput="window.syncSOS('input')">
-                                        </div>
-                                        <input type="range" id="sos-divida-slider" min="0" max="100000" step="500" value="0" class="red-slider" 
-                                            oninput="window.syncSOS('slider')">
-                                    </div>
-
-                                    <div class="input-group-premium">
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <label class="uppercase-label">Taxa de Juros Mensal (%)</label>
-                                            <span class="slider-value" id="val-juros">0%</span>
-                                        </div>
-                                        <input type="range" id="sos-juros-slider" min="0" max="20" step="0.5" value="0" class="red-slider" oninput="window.atualizarDadosSOS()">
-                                    </div>
-
-                                    <div class="input-group-premium">
-                                        <label class="uppercase-label">Gastos Dispensáveis (R$/Mês)</label>
-                                        <input type="number" id="sos-futilidades" placeholder="Ex: 150" value="0"
-                                            oninput="window.atualizarDadosSOS()" style="background: rgba(255, 255, 255, 0.05);">
-                                    </div>
-
-                                    <!-- Métricas em destaque -->
-                                    <div class="sos-stats-grid">
-                                        <div class="sos-stat-item premium">
-                                            <p>Vazamento Mensal</p>
-                                            <h4 id="sos-prejuizo-resultado">R$ 0,00</h4>
-                                            <div class="stat-progress-bg"><div id="vazamento-bar" class="stat-progress-fill"></div></div>
-                                        </div>
-                                        <div class="sos-stat-item premium">
-                                            <p>Autonomia Atual</p>
-                                            <h4 id="sos-autonomia-resultado">N/A</h4>
-                                            <div class="stat-progress-bg"><div id="autonomia-bar" class="stat-progress-fill blue"></div></div>
-                                        </div>
-                                    </div>
-
-                                    <button class="btn-red-glow"
-                                        style="width: 100%; margin-top: 25px; padding: 18px;"
-                                        onclick="window.exportarPlanilhaResgate()">📥 Baixar Plano de Resgate (CSV)</button>
-                                </div>
                             </div>
+                            <!-- FIM CALCULADORAS DE JUROS -->
 
                         </div>
                     </article>

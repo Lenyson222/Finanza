@@ -1,4 +1,4 @@
-import { renderHeader, parseNumber, validarAcesso } from '../shared/header.js';
+import { renderHeader, parseNumber, validarAcesso } from './header.js';
 
 
 
@@ -9,6 +9,46 @@ window.dados = {
 };
 
 let sobraAtualGlobal = 0;
+let chartDoughnut;
+
+function initChart() {
+    if (typeof Chart === "undefined") return;
+    Chart.defaults.color = '#9a9ab0';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    if (chartDoughnut) chartDoughnut.destroy();
+
+    const canvas1 = document.getElementById('meuGrafico');
+    if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        chartDoughnut = new Chart(ctx1, {
+            type: 'doughnut',
+            data: { labels: [], datasets: [{ data: [], backgroundColor: ['#33e0ff', '#ff6677', '#ffd700', '#a55eea', '#ff9f43', '#ff3388'], borderWidth: 0, hoverOffset: 4 }] },
+            options: { plugins: { legend: { display: false } }, cutout: '70%', maintainAspectRatio: true, aspectRatio: 1 },
+            plugins: [{
+                id: 'htmlLegend',
+                afterUpdate(chart) {
+                    const legendEl = document.getElementById('distribuicao-legenda');
+                    if (!legendEl) return;
+                    const labels = chart.data.labels || [];
+                    const colors = chart.data.datasets[0]?.backgroundColor || [];
+                    const valores = chart.data.datasets[0]?.data || [];
+                    const total = valores.reduce((a, b) => a + b, 0);
+                    legendEl.innerHTML = labels.map((label, i) => {
+                        const pct = total > 0 ? Math.round((valores[i] / total) * 100) : 0;
+                        const cor = colors[i % colors.length];
+                        return `<div class="leg-item" style="display: flex; align-items: center; gap: 10px; padding: 5px 8px; border-radius: 6px; transition: background 0.2s ease;">
+                            <span class="leg-cor" style="background:${cor}; width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0;"></span>
+                            <span class="leg-nome" style="flex: 1; font-size: 13px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${label}</span>
+                            <span class="leg-pct" style="font-size: 12px; font-weight: 700; color: var(--text-muted); min-width: 34px; text-align: right;">${pct}%</span>
+                        </div>`;
+                    }).join('');
+                }
+            }]
+        });
+    }
+}
 
 window.salvarSOSLocal = function () {
     localStorage.setItem("FinanzaSOS", JSON.stringify({
@@ -32,21 +72,48 @@ window.carregarSOSLocal = async function () {
     }
 
     // 2. Calcula Sobra Externa vinda do Banco de Dados Principal Local (para cálculo de Autonomia)
+    initChart();
     if (typeof window.buscarItens === 'function') {
         const itens = await window.buscarItens();
         if(itens) window.dados.despesasGlobal = itens;
         
         let entradas = 0; let saidas = 0;
         let dDate = new Date();
+        const resumosGrafico = {};
+
         window.dados.despesasGlobal.forEach(d => {
             if (!d.data) return;
             const dt = new Date(d.data + "T12:00:00");
             if (dt.getMonth() === dDate.getMonth() && dt.getFullYear() === dDate.getFullYear()) {
                 const val = parseNumber(d.valor) || 0;
-                if(d.tipo === 'Entrada') entradas += val; else saidas += val;
+                if(d.tipo === 'Entrada') {
+                    entradas += val; 
+                } else {
+                    saidas += val;
+                    const cat = d.categoria || 'Geral';
+                    resumosGrafico[cat] = (resumosGrafico[cat] || 0) + val;
+                }
             }
         });
         sobraAtualGlobal = entradas - saidas;
+
+        if (chartDoughnut) {
+            chartDoughnut.data.labels = Object.keys(resumosGrafico);
+            chartDoughnut.data.datasets[0].data = Object.values(resumosGrafico);
+            chartDoughnut.update();
+        }
+
+        const elemSobra = document.getElementById('resultado-sobra');
+        if (elemSobra) {
+            elemSobra.textContent = sobraAtualGlobal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            if (sobraAtualGlobal < 0) {
+                elemSobra.style.color = "var(--accent-red)";
+            } else if (sobraAtualGlobal > 0) {
+                elemSobra.style.color = "var(--accent-green)";
+            } else {
+                elemSobra.style.color = "var(--text-main)";
+            }
+        }
     }
 
     window.renderChecklistSOS();
@@ -171,6 +238,40 @@ window.simularAcaoSOS = function(tipo) {
     if (tipo === 'delivery') iF.value = Math.max(0, parseFloat(iF.value||0) - 200);
     if (tipo === 'renegotiate') sJ.value = Math.max(0, parseFloat(sJ.value||0) - 2);
     window.atualizarDadosSOS();
+};
+
+window.calcularJurosUnificado = function() {
+    const tipo = document.getElementById('calc-tipo-juros').value;
+    const c = parseFloat(document.getElementById('calc-capital').value) || 0;
+    const i = (parseFloat(document.getElementById('calc-taxa').value) || 0) / 100;
+    const t = parseFloat(document.getElementById('calc-tempo').value) || 0;
+    
+    let juros = 0;
+    let montante = 0;
+    
+    if (tipo === 'simples') {
+        juros = c * i * t;
+        montante = c + juros;
+    } else {
+        montante = c * Math.pow((1 + i), t);
+        juros = montante - c;
+    }
+    
+    const resultadoJuros = document.getElementById('calc-resultado-juros');
+    const resultadoMontante = document.getElementById('calc-resultado-montante');
+    const itemBorder = resultadoJuros.parentElement;
+    
+    resultadoJuros.textContent = juros.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    resultadoMontante.textContent = montante.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    
+    // Altera a cor dinamicamente para manter o visual
+    if (tipo === 'simples') {
+        itemBorder.style.borderLeftColor = 'var(--accent-blue)';
+        resultadoJuros.className = 'text-blue';
+    } else {
+        itemBorder.style.borderLeftColor = 'var(--accent-green)';
+        resultadoJuros.className = 'text-green';
+    }
 };
 
 window.exportarPlanilhaResgate = function () {
