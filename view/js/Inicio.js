@@ -158,7 +158,6 @@ window.renderDespesas = function () {
             return `
             <div class="input-row fade-in-up ${d.tipo === 'Entrada' ? 'item-entrada' : 'item-saida'}">
                 <input type="date" value="${d.data || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'data', this.value)" style="flex: 1;">
-                <input type="text" value="${d.nome || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'nome', this.value)" style="flex: 3;" placeholder="${d.tipo === 'Entrada' ? 'Fonte/Pagador' : 'Descrição'}">
                 <input type="text" list="opcoes-categorias-${d.tipo === 'Entrada' ? 'entrada' : 'saida'}" value="${d.categoria || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'categoria', this.value)" style="flex: 2;" placeholder="Categoria">
                 <input type="text" value="${valorDisplay}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'valor', this.value)" style="flex: 1.2;" placeholder="R$ 0,00">
                 <button type="button" class="btn-delete" onclick="window.deletarDespesa(${d.originalIndex})">✖</button>
@@ -238,11 +237,17 @@ window.calcularTudo = function() {
         elemSobra.textContent = sobraAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    // Atualiza Gráfico
+    // Atualiza Gráfico — destrói e recria para garantir cores distintas
+    const labels = Object.keys(resumosGrafico);
+    const valores = Object.values(resumosGrafico);
+    const coresBase = ['#33e0ff', '#ff6677', '#ffd700', '#a55eea', '#ff9f43', '#ff3388', '#00e096', '#ff4d4d', '#4dc9ff', '#c9ff4d'];
+    const cores = labels.map((_, i) => coresBase[i % coresBase.length]);
+
     if (chartDoughnut) {
-        chartDoughnut.data.labels = Object.keys(resumosGrafico);
-        chartDoughnut.data.datasets[0].data = Object.values(resumosGrafico);
-        chartDoughnut.update();
+        chartDoughnut.data.labels = labels;
+        chartDoughnut.data.datasets[0].data = valores;
+        chartDoughnut.data.datasets[0].backgroundColor = cores;
+        chartDoughnut.update('active');
     }
 }
 
