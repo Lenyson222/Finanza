@@ -133,10 +133,10 @@ window.renderMetas = function () {
                     </div>
                 </div>
                 <label class="uppercase-label text-muted">Aporte Mensal (% da sobra total - R$ ${sobraAtual > 0 ? sobraAtual.toFixed(2) : '0'})</label>
-                <div class="input-row fade-in-up" style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
+                <div class="input-row fade-in-up" style="display: flex; gap: 12px; margin-top: 10px; align-items: center;">
                     <input type="number" value="${m.porcentagemSobra}" step="1" max="100" min="0" onchange="window.atualizarMetaPorcentagem(${i}, this.value)" 
-                        style="width: 100px; padding: 10px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(10, 10, 12, 0.6); color: #fff; font-size: 16px; font-weight: 600;" placeholder="0">
-                    <span style="color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 12px;">% do valor</span>
+                        class="input-meta-porcentagem" placeholder="0">
+                    <span style="color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">% do aporte</span>
                 </div>
                 <progress id="prog-${i}" value="0" max="100"></progress>
             </div>`).join('');
@@ -161,9 +161,13 @@ window.renderMetas = function () {
         }
     });
 
-    if (chartDoughnut) {
+    if (chartDoughnut && labelsGrafico.length > 0) {
         chartDoughnut.data.labels = labelsGrafico;
         chartDoughnut.data.datasets[0].data = dadosGrafico;
+        chartDoughnut.update();
+    } else if (chartDoughnut) {
+        chartDoughnut.data.labels = [];
+        chartDoughnut.data.datasets[0].data = [];
         chartDoughnut.update();
     }
 }
@@ -189,4 +193,9 @@ window.salvarMetasLocal = function() {
     localStorage.setItem("FinanzaMetas", JSON.stringify(window.dados.metas));
 }
 
-document.addEventListener('DOMContentLoaded', inicializarMetas);
+// Inicialização segura para módulos
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarMetas);
+} else {
+    inicializarMetas();
+}

@@ -5,6 +5,17 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+.inner-calc {
+    background: rgba(51, 255, 184, 0.05) !important;
+    border: 1px solid rgba(51, 255, 184, 0.2) !important;
+    box-shadow: inset 0 0 20px rgba(51, 255, 184, 0.05) !important;
+}
+
+.inner-calc .card-title {
+    color: var(--accent-green) !important;
+    text-shadow: 0 0 10px var(--glow-green);
+}
+
 .sos-flow-container { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 20px; margin-bottom: 20px; flex-wrap: wrap; }
 .step-item { background: rgba(18, 18, 24, 0.8); border: 1px solid var(--border-light); padding: 12px 20px; border-radius: 8px; color: var(--text-muted); font-weight: 600; font-size: 14px; transition: var(--transition); cursor: pointer; }
 .step-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); border-color: var(--border-highlight); }
@@ -54,3 +65,8 @@
 .input-red-hl { width: 120px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,102,119,0.3); border-radius: 6px; color: var(--accent-red); font-family: 'Inter', monospace; font-size: 14px; font-weight: 800; text-align: right; padding: 4px 8px; outline: none; }
 
 @media (max-width: 900px) { .sos-grid-colunas { grid-template-columns: 1fr !important; } }
+
+/* Inputs de números da calculadora de juros */
+.inner-calc input[type="number"] {
+    color: var(--accent-green) !important;
+}

@@ -158,8 +158,8 @@ window.renderDespesas = function () {
             return `
             <div class="input-row fade-in-up ${d.tipo === 'Entrada' ? 'item-entrada' : 'item-saida'}">
                 <input type="date" value="${d.data || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'data', this.value)" style="flex: 1;">
-                <input type="text" value="${d.nome || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'nome', this.value)" style="flex: 2.2;" placeholder="${d.tipo === 'Entrada' ? 'Fonte/Pagador' : 'Descrição'}">
-                <input type="text" list="${d.tipo === 'Entrada' ? 'opcoes-categorias-entrada' : 'opcoes-categorias-saida'}" value="${d.categoria || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'categoria', this.value)" style="flex: 1.8;" placeholder="Categoria">
+                <input type="text" value="${d.nome || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'nome', this.value)" style="flex: 3;" placeholder="${d.tipo === 'Entrada' ? 'Fonte/Pagador' : 'Descrição'}">
+                <input type="text" list="opcoes-categorias-${d.tipo === 'Entrada' ? 'entrada' : 'saida'}" value="${d.categoria || ''}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'categoria', this.value)" style="flex: 2;" placeholder="Categoria">
                 <input type="text" value="${valorDisplay}" onchange="window.atualizarRegistroDB(${d.originalIndex}, 'valor', this.value)" style="flex: 1.2;" placeholder="R$ 0,00">
                 <button type="button" class="btn-delete" onclick="window.deletarDespesa(${d.originalIndex})">✖</button>
             </div>`;

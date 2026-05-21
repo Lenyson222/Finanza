@@ -4,6 +4,7 @@ import { renderHeader, validarAcesso, parseNumber } from './header.js';
 
 let chartLargo, chartArea;
 let despesasGlobal = [];
+window.periodosGraficosPerfil = "12meses";
 
 async function inicializarPerfil() {
     const acessoOk = await validarAcesso();
@@ -123,40 +124,94 @@ function atualizarGraficos() {
     let dPatrimonio = [];
     let saldoAcumulado = 0;
 
-    // Calcular saldo acumulado ANTES dos últimos 12 meses
-    const inicio12 = new Date();
-    inicio12.setMonth(agora.getMonth() - 11);
-    inicio12.setDate(1);
+    const modo = window.periodosGraficosPerfil;
 
-    despesasGlobal.forEach(d => {
-        const dt = new Date(d.data + "T12:00:00");
-        if (dt < inicio12) {
-            const val = parseNumber(d.valor) || 0;
-            saldoAcumulado += (d.tipo === 'Entrada' ? val : -val);
+    if (modo === "custom") {
+        const dIniStr = document.getElementById('data-inicio-perfil')?.value;
+        const dFimStr = document.getElementById('data-fim-perfil')?.value;
+
+        if (dIniStr && dFimStr) {
+            const dIni = new Date(dIniStr + "T00:00:00");
+            const dFim = new Date(dFimStr + "T23:59:59");
+
+            labels = ["Resultado do Período"];
+            let ganhoTotal = 0;
+            let gastoTotal = 0;
+
+            despesasGlobal.forEach(d => {
+                const dt = new Date(d.data + "T12:00:00");
+                if (dt >= dIni && dt <= dFim) {
+                    const val = parseNumber(d.valor) || 0;
+                    if (d.tipo === 'Entrada') ganhoTotal += val; else gastoTotal += val;
+                }
+            });
+
+            dGanhos = [ganhoTotal];
+            dGastos = [gastoTotal];
+            dPatrimonio = [ganhoTotal - gastoTotal];
         }
-    });
-
-    for (let i = 11; i >= 0; i--) {
-        const targetM = new Date();
-        targetM.setMonth(agora.getMonth() - i);
-        const mesNome = targetM.toLocaleString('pt-BR', { month: 'short' });
-        labels.push(mesNome);
-
-        let ganhoM = 0;
-        let gastoM = 0;
+    } else if (modo === "4semanas") {
+        labels = ["Semana 1", "Semana 2", "Semana 3", "Semana 4"];
+        dGanhos = [0, 0, 0, 0];
+        dGastos = [0, 0, 0, 0];
+        const mesAtual = agora.getMonth();
+        despesasGlobal.forEach(d => {
+            const dt = new Date(d.data + "T12:00:00");
+            if (dt.getMonth() === mesAtual && dt.getFullYear() === agora.getFullYear()) {
+                const sem = Math.min(Math.floor((dt.getDate() - 1) / 7), 3);
+                const val = parseNumber(d.valor) || 0;
+                if (d.tipo === 'Entrada') dGanhos[sem] += val; else dGastos[sem] += val;
+            }
+        });
+        let curr = 0;
+        dPatrimonio = dGanhos.map((g, i) => { curr += (g - dGastos[i]); return curr; });
+    } else if (modo === "anos") {
+        const anosMap = {};
+        despesasGlobal.forEach(d => {
+            const ano = new Date(d.data + "T12:00:00").getFullYear();
+            if (!anosMap[ano]) anosMap[ano] = { ganho: 0, gasto: 0 };
+            const val = parseNumber(d.valor) || 0;
+            if (d.tipo === 'Entrada') anosMap[ano].ganho += val; else anosMap[ano].gasto += val;
+        });
+        labels = Object.keys(anosMap).sort();
+        let curr = 0;
+        labels.forEach(a => {
+            dGanhos.push(anosMap[a].ganho);
+            dGastos.push(anosMap[a].gasto);
+            curr += (anosMap[a].ganho - anosMap[a].gasto);
+            dPatrimonio.push(curr);
+        });
+    } else {
+        // Padrão: 12 meses
+        const inicio12 = new Date();
+        inicio12.setMonth(agora.getMonth() - 11);
+        inicio12.setDate(1);
 
         despesasGlobal.forEach(d => {
             const dt = new Date(d.data + "T12:00:00");
-            if (dt.getMonth() === targetM.getMonth() && dt.getFullYear() === targetM.getFullYear()) {
+            if (dt < inicio12) {
                 const val = parseNumber(d.valor) || 0;
-                if (d.tipo === 'Entrada') ganhoM += val; else gastoM += val;
+                saldoAcumulado += (d.tipo === 'Entrada' ? val : -val);
             }
         });
 
-        dGanhos.push(ganhoM);
-        dGastos.push(gastoM);
-        saldoAcumulado += (ganhoM - gastoM);
-        dPatrimonio.push(saldoAcumulado);
+        for (let i = 11; i >= 0; i--) {
+            const targetM = new Date();
+            targetM.setMonth(agora.getMonth() - i);
+            labels.push(targetM.toLocaleString('pt-BR', { month: 'short' }));
+
+            let ganhoM = 0, gastoM = 0;
+            despesasGlobal.forEach(d => {
+                const dt = new Date(d.data + "T12:00:00");
+                if (dt.getMonth() === targetM.getMonth() && dt.getFullYear() === targetM.getFullYear()) {
+                    const val = parseNumber(d.valor) || 0;
+                    if (d.tipo === 'Entrada') ganhoM += val; else gastoM += val;
+                }
+            });
+            dGanhos.push(ganhoM); dGastos.push(gastoM);
+            saldoAcumulado += (ganhoM - gastoM);
+            dPatrimonio.push(saldoAcumulado);
+        }
     }
 
     chartLargo.data.labels = labels;
@@ -168,5 +223,18 @@ function atualizarGraficos() {
     chartArea.data.datasets[0].data = dPatrimonio;
     chartArea.update();
 }
+
+window.mudarPeriodoGraficoGlobal = function (valor) {
+    window.periodosGraficosPerfil = valor;
+    const controlesCustom = document.getElementById('controles-data-custom');
+    if (controlesCustom) {
+        controlesCustom.style.display = (valor === 'custom') ? 'flex' : 'none';
+    }
+    atualizarGraficos();
+};
+
+window.aplicarFiltroCustomPerfil = function () {
+    atualizarGraficos();
+};
 
 document.addEventListener('DOMContentLoaded', inicializarPerfil);
